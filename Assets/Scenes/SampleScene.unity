@@ -1148,6 +1148,7 @@ MonoBehaviour:
   Button2: {fileID: 1321805457}
   Button3: {fileID: 1820773839}
   MenuText: {fileID: 1110427950}
+  useAutomatic: 0
 --- !u!1 &1366353329
 GameObject:
   m_ObjectHideFlags: 0
