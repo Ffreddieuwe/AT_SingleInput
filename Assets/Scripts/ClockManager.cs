@@ -1,17 +1,38 @@
+using TMPro;
 using UnityEngine;
 
 public class ClockManager : MonoBehaviour
 {
-    private Transform m_handTransform;
+    public GameObject hand;
+    public float speed = 40f;
+    private float currentRotation;
+    public GameObject testText;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        currentRotation = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.localRotation.Set(m_handTransform.rotation.x, m_handTransform.rotation.y, 0.4f, m_handTransform.rotation.w);
-        gameObject.transform.localPosition.Set(2f, 400f, 0f);
+        currentRotation += Time.deltaTime * speed;
+        if (currentRotation >=360)
+        {
+            currentRotation = 0;   
+        }
+        hand.transform.rotation = Quaternion.Euler(0, 0, -currentRotation);
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (currentRotation < 180)
+            {
+                testText.GetComponent<TextMeshProUGUI>().text = "Right Selected";
+            }
+            else
+            {
+                testText.GetComponent<TextMeshProUGUI>().text = "Left Selected";
+            }
+        }
     }
 }
