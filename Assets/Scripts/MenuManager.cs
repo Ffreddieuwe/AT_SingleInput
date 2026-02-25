@@ -6,8 +6,7 @@ public enum MenuState
 {
     Start = 0,
     MainMenu = 1,
-    Settings = 2,
-    Play = 3
+    Settings = 2
 }
 
 public class MenuManager : MonoBehaviour
@@ -21,8 +20,6 @@ public class MenuManager : MonoBehaviour
     private GameObject m_menuCanvas;
     [SerializeField]
     private GameObject m_settingsCanvas;
-    [SerializeField]
-    private GameObject m_playCanvas;
 
     private MenuState m_state;
     private GameObject m_currentCanvas;
@@ -64,9 +61,6 @@ public class MenuManager : MonoBehaviour
                 m_currentCanvas = m_settingsCanvas;
                 m_currentCanvas.GetComponent<SettingsManager>().Init();
                 break;
-            case MenuState.Play:
-                m_currentCanvas = m_playCanvas;
-                break;
         }
 
         m_currentCanvas.SetActive(true);
@@ -78,7 +72,6 @@ public class MenuManager : MonoBehaviour
         m_startCanvas.SetActive(false);
         m_menuCanvas.SetActive(false);
         m_settingsCanvas.SetActive(false);
-        m_playCanvas.SetActive(false);
     }
 
     public void QuitGame()
@@ -100,9 +93,6 @@ public class MenuManager : MonoBehaviour
             case MenuState.Settings:
                 m_currentCanvas.GetComponent<CanvasManager>().OnHighlightChange(newHighlight, m_state);
                 m_currentCanvas.GetComponent<SettingsManager>().OnHighlightChange(newHighlight);
-                break;
-            case MenuState.Play:
-                m_currentCanvas.GetComponent<CanvasManager>().OnHighlightChange(newHighlight, m_state);
                 break;
         }
     }

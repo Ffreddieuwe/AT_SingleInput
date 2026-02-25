@@ -4,7 +4,6 @@ public class CanvasManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] m_options;
-    private int m_highlightedOption;
 
     [SerializeField]
     private GameObject m_text1;
@@ -18,7 +17,6 @@ public class CanvasManager : MonoBehaviour
     public void Init(MenuState state)
     {
         GameObject.FindFirstObjectByType<Scanner>().init(m_options[0]);
-        m_highlightedOption = 0;
         OnHighlightChange(0, state);
     }
 
@@ -30,12 +28,10 @@ public class CanvasManager : MonoBehaviour
 
     public void OnHighlightChange(int newHighlight, MenuState state)
     {
-        m_highlightedOption = newHighlight;
 
         switch (state)
         {
             case MenuState.Settings:
-            case MenuState.Play:
                 DisableAllText();
                 m_panel.SetActive(true);
                 switch (newHighlight)
