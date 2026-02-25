@@ -101,7 +101,7 @@ public class SettingsManager : MonoBehaviour
 
         settings.settingsData.automatic = !settings.settingsData.automatic;
         m_selectBuffer = settings.settingsData.automatic ? false : true;
-        GameObject.FindFirstObjectByType<Scanner>().SetAutomatic(settings.settingsData.automatic);
+        gameObject.GetComponent<Scanner>().SetAutomatic(settings.settingsData.automatic);
         m_text1.GetComponent<TextMeshProUGUI>().text = settings.settingsData.automatic ? "Automatic" : "Inverse";
         UpdateJSON();
     }

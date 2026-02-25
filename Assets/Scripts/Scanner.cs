@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,19 +10,13 @@ public class Scanner : MonoBehaviour
     private GameObject m_selectedGO;
     private const float m_holdDefault = 1.25f;
 
-    [SerializeField]
-    private GameObject m_settingsManagerParent;
     private SettingsManager m_settingsManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        m_usingAutomatic = true;
-
         m_selectedID = 0;
         m_holdTimer = 0f;
-
-        m_settingsManager = m_settingsManagerParent.GetComponent<SettingsManager>();
     }
 
     public void init(GameObject firstOption)
@@ -30,6 +25,9 @@ public class Scanner : MonoBehaviour
         m_selectedID = 0;
         m_selectedGO = firstOption;
         firstOption.GetComponent<Button>().Select();
+
+        m_settingsManager = gameObject.GetComponent<SettingsManager>();
+        SetAutomatic(m_settingsManager.settings.settingsData.automatic);
     }
 
     // Update is called once per frame from the menu manager
@@ -101,7 +99,10 @@ public class Scanner : MonoBehaviour
 
     public void SetAutomatic(bool automatic)
     {
+        Debug.Log(automatic);
         m_usingAutomatic = automatic;
         gameObject.GetComponent<MenuManager>().SetMethodText(automatic);
+        m_settingsManager.settings.settingsData.automatic = automatic;
+        m_settingsManager.UpdateJSON();
     }
 }

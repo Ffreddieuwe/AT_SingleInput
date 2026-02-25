@@ -59,7 +59,7 @@ public class MenuManager : MonoBehaviour
                 break;
             case MenuState.Settings:
                 m_currentCanvas = m_settingsCanvas;
-                m_currentCanvas.GetComponent<SettingsManager>().Init();
+                gameObject.GetComponent<SettingsManager>().Init();
                 break;
         }
 
@@ -92,7 +92,7 @@ public class MenuManager : MonoBehaviour
                 break;
             case MenuState.Settings:
                 m_currentCanvas.GetComponent<CanvasManager>().OnHighlightChange(newHighlight, m_state);
-                m_currentCanvas.GetComponent<SettingsManager>().OnHighlightChange(newHighlight);
+                gameObject.GetComponent<SettingsManager>().OnHighlightChange(newHighlight);
                 break;
         }
     }
