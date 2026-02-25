@@ -99,7 +99,6 @@ public class Scanner : MonoBehaviour
 
     public void SetAutomatic(bool automatic)
     {
-        Debug.Log(automatic);
         m_usingAutomatic = automatic;
         gameObject.GetComponent<MenuManager>().SetMethodText(automatic);
         m_settingsManager.settings.settingsData.automatic = automatic;

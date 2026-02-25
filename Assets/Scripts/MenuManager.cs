@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum MenuState
 {
@@ -95,5 +96,10 @@ public class MenuManager : MonoBehaviour
                 gameObject.GetComponent<SettingsManager>().OnHighlightChange(newHighlight);
                 break;
         }
+    }
+
+    public void LoadGame()
+    {
+        SceneManager.LoadScene("Game");
     }
 }
