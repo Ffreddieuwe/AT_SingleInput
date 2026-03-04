@@ -90,7 +90,7 @@ public class Scanner : MonoBehaviour
             gameObject.GetComponent<MenuManager>().OnHighlightChange(m_selectedID);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space))
         {
             m_holdTimer = 0f;
             m_selectedGO.GetComponent<Button>().onClick.Invoke();

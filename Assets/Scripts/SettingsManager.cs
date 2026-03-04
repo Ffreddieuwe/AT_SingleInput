@@ -16,8 +16,6 @@ public class SettingsManager : MonoBehaviour
     public TextAsset textJSON;
     public SettingsDataList settings;
 
-    private bool m_selectBuffer;
-
     [System.Serializable]
     public class SettingsData
     {
@@ -41,7 +39,6 @@ public class SettingsManager : MonoBehaviour
     {
         DisableAll();
         m_text1.SetActive(true);
-        m_selectBuffer = false;
         SetupText();
     }
 
@@ -93,14 +90,7 @@ public class SettingsManager : MonoBehaviour
 
     public void ToggleControlMode()
     {
-        if (m_selectBuffer)
-        {
-            m_selectBuffer = false;
-            return;
-        }
-
         settings.settingsData.automatic = !settings.settingsData.automatic;
-        m_selectBuffer = settings.settingsData.automatic ? false : true;
         gameObject.GetComponent<Scanner>().SetAutomatic(settings.settingsData.automatic);
         m_text1.GetComponent<TextMeshProUGUI>().text = settings.settingsData.automatic ? "Automatic" : "Inverse";
         UpdateJSON();
