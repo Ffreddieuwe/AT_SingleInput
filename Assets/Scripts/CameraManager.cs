@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    enum Panel 
+    public enum Panel 
     {
         Middle = 0,
         Left = 1,
@@ -11,7 +11,7 @@ public class CameraManager : MonoBehaviour
         Down = 4,
     }
 
-    enum Direction
+    public enum Direction
     {
         Left, 
         Right, 
@@ -27,7 +27,7 @@ public class CameraManager : MonoBehaviour
         new Vector3(0f,-10f,-10f)
     };
 
-    private Panel m_selectedPanel;
+    public Panel m_selectedPanel;
     private Panel m_targetPanel;
     private Vector3 m_targetPos;
     private bool m_moving;
@@ -74,13 +74,18 @@ public class CameraManager : MonoBehaviour
             }
             else
             {
+                if (m_targetPanel == Panel.Middle && m_selectedPanel != Panel.Up)
+                {
+                    Camera.main.GetComponent<DrinkManager>().m_shouldAskComplete = true;
+                }
+
                 m_moving = false;
                 m_selectedPanel = m_targetPanel;
             }
         }
     }
 
-    private void Move(Direction direction)
+    public void Move(Direction direction)
     {
         if (m_moving)
         {
