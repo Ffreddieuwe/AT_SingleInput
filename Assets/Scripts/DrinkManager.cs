@@ -25,8 +25,10 @@ public class DrinkManager : MonoBehaviour
     }
 
     public GameObject[] m_slots;
+    public GameObject[] m_slotsSection2;
     private Ingredients[] m_slotIngredients = { Ingredients.None, Ingredients.None, Ingredients.None };
     public GameObject[] m_glasses;
+    public GameObject[] m_glassesSection2;
     private Glasses m_activeGlass;
     [SerializeField]
     private Sprite[] m_ingredientSprites;
@@ -75,18 +77,14 @@ public class DrinkManager : MonoBehaviour
 
     public void ResetDrink()
     {
-
         ResetGlass();
-
-        for (int i = 0; i < m_slots.Length; i++)
-        {
-            m_slots[i].SetActive(false);
-        }
 
         for (int i = 0; i < m_slotIngredients.Length; i++)
         {
             m_slotIngredients[i] = Ingredients.None;
             m_slots[i].GetComponent<SpriteRenderer>().sprite = m_ingredientSprites[(int)Ingredients.None];
+            m_slotsSection2[i].GetComponent<SpriteRenderer>().sprite = m_ingredientSprites[(int)Ingredients.None];
+            
         }
 
         m_iceCubes.SetActive(false);
@@ -105,14 +103,17 @@ public class DrinkManager : MonoBehaviour
         if (glass == Glasses.Martini)
         {
             m_glasses[0].SetActive(true);
+            m_glassesSection2[0].SetActive(true);
         }
         else if (glass == Glasses.Hiball)
         {
             m_glasses[1].SetActive(true);
+            m_glassesSection2[1].SetActive(true);
         }
         else
         {
             m_glasses[2].SetActive(true);
+            m_glassesSection2[2].SetActive(true);
         }
     }
 
@@ -122,6 +123,7 @@ public class DrinkManager : MonoBehaviour
         for (int i = 0; i < m_glasses.Length; i++)
         {
             m_glasses[i].SetActive(false);
+            m_glassesSection2[i].SetActive(false);
         }
     }
 
@@ -131,8 +133,10 @@ public class DrinkManager : MonoBehaviour
         {
             if (m_slotIngredients[i] == Ingredients.None)
             {
+                Debug.Log("hello");
                 m_slotIngredients[i] = newIngredient;
                 m_slots[i].GetComponent<SpriteRenderer>().sprite = m_ingredientSprites[(int)newIngredient];
+                m_slotsSection2[i].GetComponent<SpriteRenderer>().sprite = m_ingredientSprites[(int)newIngredient];
                 break;
             }
         }
