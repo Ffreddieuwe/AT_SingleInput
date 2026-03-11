@@ -138,6 +138,8 @@ public class SettingsManager : MonoBehaviour
 
     private void SetupText()
     {
+        m_text1.GetComponent<TextMeshProUGUI>().text = settings.settingsData.automatic ? "Automatic" : "Inverse";
+
         switch (settings.settingsData.gameSpeed)
         {
             case 0.75f:

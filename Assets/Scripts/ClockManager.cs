@@ -37,7 +37,7 @@ public class ClockManager : MonoBehaviour
         }
         hand.transform.rotation = Quaternion.Euler(0, 0, -currentRotation);
 
-        if (m_panel != Camera.main.GetComponent<CameraManager>().m_selectedPanel)
+        if (m_panel != Camera.main.GetComponent<CameraManager>().m_selectedPanel || Camera.main.GetComponent<CameraManager>().m_moving)
         {
             return;
         }

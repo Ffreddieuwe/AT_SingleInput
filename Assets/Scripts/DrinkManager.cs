@@ -66,7 +66,7 @@ public class DrinkManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_shouldAskComplete)
+        if (m_shouldAskComplete && Camera.main.GetComponent<CameraManager>().m_selectedPanel == CameraManager.Panel.Middle)
         {
             m_shouldAskComplete = false;
             m_askingComplete = true;
@@ -98,6 +98,7 @@ public class DrinkManager : MonoBehaviour
     {
         ResetGlass();
         m_activeGlass = glass;
+        Camera.main.GetComponent<DrinkManager>().m_shouldAskComplete = true;
         // Slot 0 is martini, slot 1 is hiball, slot 2 is rocks.
 
         if (glass == Glasses.Martini)
@@ -137,6 +138,7 @@ public class DrinkManager : MonoBehaviour
                 m_slotIngredients[i] = newIngredient;
                 m_slots[i].GetComponent<SpriteRenderer>().sprite = m_ingredientSprites[(int)newIngredient];
                 m_slotsSection2[i].GetComponent<SpriteRenderer>().sprite = m_ingredientSprites[(int)newIngredient];
+                Camera.main.GetComponent<DrinkManager>().m_shouldAskComplete = true;
                 break;
             }
         }
@@ -145,6 +147,7 @@ public class DrinkManager : MonoBehaviour
     public void ToggleIceCube()
     {
         m_iceCubes.SetActive(!m_iceCubes.activeSelf);
+        Camera.main.GetComponent<DrinkManager>().m_shouldAskComplete = true;
         m_shouldAskComplete = true;
     }
 

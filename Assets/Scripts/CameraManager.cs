@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
@@ -30,7 +31,7 @@ public class CameraManager : MonoBehaviour
     public Panel m_selectedPanel;
     private Panel m_targetPanel;
     private Vector3 m_targetPos;
-    private bool m_moving;
+    public bool m_moving;
 
     [SerializeField]
     private float m_speed = 10f;
@@ -69,16 +70,17 @@ public class CameraManager : MonoBehaviour
         {
             if (transform.position != m_targetPos)
             {
+                if (Vector3.Distance(transform.position, m_targetPos) < Time.deltaTime * m_speed)
+                {
+                    transform.position = m_targetPos;
+                    return;
+                }
+
                 Vector3 direction = (m_targetPos - transform.position).normalized;
                 transform.position += direction * Time.deltaTime * m_speed;
             }
             else
             {
-                if (m_targetPanel == Panel.Middle && m_selectedPanel != Panel.Up)
-                {
-                    Camera.main.GetComponent<DrinkManager>().m_shouldAskComplete = true;
-                }
-
                 m_moving = false;
                 m_selectedPanel = m_targetPanel;
             }
