@@ -36,6 +36,12 @@ public class CameraManager : MonoBehaviour
     [SerializeField]
     private float m_speed = 10f;
 
+    [SerializeField]
+    private GameObject m_mainBarDescriptionText;
+
+    [SerializeField]
+    private GameObject m_pauseDescriptionText;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -83,6 +89,15 @@ public class CameraManager : MonoBehaviour
             {
                 m_moving = false;
                 m_selectedPanel = m_targetPanel;
+
+                if (m_selectedPanel == Panel.Middle)
+                {
+                    m_mainBarDescriptionText.SetActive(true);
+                }
+                else if (m_selectedPanel == Panel.Up)
+                {
+                    m_pauseDescriptionText.SetActive(true);
+                }
             }
         }
     }

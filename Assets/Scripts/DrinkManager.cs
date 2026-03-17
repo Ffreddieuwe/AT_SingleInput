@@ -19,9 +19,9 @@ public class DrinkManager : MonoBehaviour
     public enum Glasses
     {
         None = 0,
-        Martini,
-        Hiball,
-        Rocks,
+        Martini = 1,
+        Hiball = 2,
+        Rocks = 3,
     }
 
     public GameObject[] m_slots;
@@ -35,6 +35,11 @@ public class DrinkManager : MonoBehaviour
     [SerializeField]
     private GameObject m_iceCubes;
 
+    private int m_currentOrderIndex = 0;
+
+    [SerializeField]
+    private Sprite[] m_cocktailSprites;
+
     public bool m_shouldAskComplete;
     public bool m_askingComplete;
 
@@ -43,7 +48,7 @@ public class DrinkManager : MonoBehaviour
     [SerializeField]
     GameObject m_confirmationPanel;
     [SerializeField]
-    GameObject m_customerOrder;
+    GameObject[] m_customerOrder;
     [SerializeField]
     GameObject m_success;
     [SerializeField]
@@ -61,6 +66,8 @@ public class DrinkManager : MonoBehaviour
 
         m_success.SetActive(false);
         m_failure.SetActive(false);
+
+        NewOrder();
     }
 
     // Update is called once per frame
@@ -91,7 +98,10 @@ public class DrinkManager : MonoBehaviour
         m_confirmationPanel.SetActive(false);
         m_success.SetActive(false);
         m_failure.SetActive(false);
-        m_customerOrder.SetActive(true);
+        foreach (var item in m_customerOrder)
+        {
+            item.SetActive(true);
+        }
     }
 
     public void ActivateGlass(Glasses glass)
@@ -153,48 +163,64 @@ public class DrinkManager : MonoBehaviour
 
     public void ValidateDrink()
     {
+        CocktailManager.CocktailData orderData = gameObject.GetComponent<CocktailManager>().m_cocktails.cocktailData[m_currentOrderIndex];
+
         m_confirmationClock.SetActive(false);
         m_confirmationPanel.SetActive(false);
-        m_customerOrder.SetActive(false);
+        foreach (var item in m_customerOrder)
+        {
+            item.SetActive(false);
+        }
 
         m_askingComplete = false;
 
-        if (m_activeGlass != Glasses.Hiball)
+        if (m_activeGlass != (Glasses)orderData.glass)
         {
             m_failure.SetActive(true);
             return;
         }
 
-        if (!m_iceCubes.activeSelf)
+        if (m_iceCubes.activeSelf != orderData.ice)
         {
             m_failure.SetActive(true);
             return;
         }
 
-        bool foundVodka = false;
-        bool foundOJ = false;
-        bool foundLemon = false;
-
-        for (int i = 0; i < m_slotIngredients.Length; i++)
+        if (orderData.ingredients.Length == 1)
         {
-            if (m_slotIngredients[i] == Ingredients.Vodka)
+            if (m_slotIngredients[0] != (Ingredients)orderData.ingredients[0] || m_slotIngredients[1] != Ingredients.None)
             {
-                foundVodka = true;
-            }
-            else if (m_slotIngredients[i] == Ingredients.Lemon)
-            {
-                foundLemon = true;
-            }
-            else if (m_slotIngredients[i] == Ingredients.OrangeJuice)
-            {
-                foundOJ = true;
+                m_failure.SetActive(true);
+                return;
             }
         }
-
-        if (!(foundOJ && foundVodka && foundLemon))
+        else
         {
-            m_failure.SetActive(true);
-            return;
+            bool foundIng1 = false;
+            bool foundIng2 = false;
+            bool foundIng3 = false;
+
+            for (int i = 0; i < m_slotIngredients.Length; i++)
+            {
+                if (m_slotIngredients[i] == (Ingredients)orderData.ingredients[0])
+                {
+                    foundIng1 = true;
+                }
+                else if (m_slotIngredients[i] == Ingredients.Lemon)
+                {
+                    foundIng2 = true;
+                }
+                else if (m_slotIngredients[i] == Ingredients.OrangeJuice)
+                {
+                    foundIng3 = true;
+                }
+            }
+
+            if (!(foundIng1 && foundIng2 && foundIng3))
+            {
+                m_failure.SetActive(true);
+                return;
+            }
         }
 
         m_success.SetActive(true);
@@ -205,5 +231,16 @@ public class DrinkManager : MonoBehaviour
         m_confirmationClock.SetActive(false);
         m_confirmationPanel.SetActive(false);
         m_askingComplete = false;
+    }
+
+    private void NewOrder()
+    {
+        gameObject.GetComponent<CocktailManager>().ReadJSON();
+        m_currentOrderIndex = Random.Range(0, gameObject.GetComponent<CocktailManager>().m_cocktails.cocktailData.Length - 1);
+
+        foreach(var item in m_customerOrder)
+        {
+            item.GetComponent<SpriteRenderer>().sprite = m_cocktailSprites[m_currentOrderIndex];
+        }
     }
 }

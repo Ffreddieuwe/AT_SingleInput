@@ -1,0 +1,10 @@
+{
+    "cocktailData": 
+    [
+        {"name": "Screwdriver", "ingredients": [2, 6, 8], "ice": true, "glass": 2},
+        {"name": "GinMojito", "ingredients": [1, 4, 7], "ice": false, "glass": 1},
+        {"name": "WhiskeyCola", "ingredients": [3, 5, 9], "ice": true, "glass": 3},
+        {"name": "WhiskeyNeat", "ingredients": [3], "ice": false, "glass": 3},
+        {"name": "KillerMartini", "ingredients": [1, 2, 7], "ice": false, "glass": 1}
+    ]
+}

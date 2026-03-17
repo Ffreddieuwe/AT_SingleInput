@@ -34,19 +34,15 @@ public class SubClockHandler : MonoBehaviour
         {
             case 0:
                 m_parentClock.SetActive(true);
-                m_parentClock.GetComponent<ClockManager>().ResetRotation();
                 break;
             case 1:
                 m_garnishClock.SetActive(true);
-                m_garnishClock.GetComponent<ClockManager>().ResetRotation();
                 break;
             case 2:
                 m_spiritClock.SetActive(true);
-                m_spiritClock.GetComponent<ClockManager>().ResetRotation();
                 break;
             case 3:
                 m_softClock.SetActive(true);
-                m_softClock.GetComponent<ClockManager>().ResetRotation();
                 break;
         }
     }

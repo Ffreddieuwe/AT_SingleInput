@@ -7,7 +7,7 @@ public class ClockManager : MonoBehaviour
 {
     public GameObject hand;
     public float speed = 80;
-    private float currentRotation;
+    public float currentRotation;
 
     [SerializeField]
     private CameraManager.Panel m_panel;
@@ -15,6 +15,12 @@ public class ClockManager : MonoBehaviour
     private int m_subClockIndex;
     [SerializeField]
     private bool m_confirmationClock;
+
+    [SerializeField]
+    private GameObject m_mainBarDescriptionText;
+
+    [SerializeField]
+    private GameObject m_pauseDescriptionText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -87,6 +93,8 @@ public class ClockManager : MonoBehaviour
             return;
         }
 
+        m_mainBarDescriptionText.SetActive(false);
+
         if (currentRotation < 45 || currentRotation > 315)
         {
             Camera.main.GetComponent<CameraManager>().Move(CameraManager.Direction.Up);
@@ -97,6 +105,7 @@ public class ClockManager : MonoBehaviour
         }
         else if (currentRotation < 215)
         {
+            m_mainBarDescriptionText.SetActive(true);
             Camera.main.GetComponent<DrinkManager>().ToggleIceCube();
         }
         else
@@ -249,6 +258,8 @@ public class ClockManager : MonoBehaviour
 
     private void UpUpdate()
     {
+        m_pauseDescriptionText.SetActive(false);
+
         if (currentRotation < 120)
         {
             Camera.main.GetComponent<DrinkManager>().ResetDrink();
@@ -274,10 +285,5 @@ public class ClockManager : MonoBehaviour
         {
             Debug.Log("Ice Selected");
         }
-    }
-
-    public void ResetRotation()
-    {
-        hand.transform.rotation = Quaternion.Euler(0,0,0);
     }
 }
