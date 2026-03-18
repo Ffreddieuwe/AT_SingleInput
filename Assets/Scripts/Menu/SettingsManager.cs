@@ -22,6 +22,7 @@ public class SettingsManager : MonoBehaviour
         public bool automatic;
         public float menuSpeed;
         public float gameSpeed;
+        public int gameMode;
     }
 
     [System.Serializable]

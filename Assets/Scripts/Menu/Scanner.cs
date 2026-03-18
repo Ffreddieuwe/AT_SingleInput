@@ -10,6 +10,8 @@ public class Scanner : MonoBehaviour
     private GameObject m_selectedGO;
     private const float m_holdDefault = 1.25f;
 
+    public bool m_scanningPaused = false;
+
     private SettingsManager m_settingsManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -33,6 +35,8 @@ public class Scanner : MonoBehaviour
     // Update is called once per frame from the menu manager
     public void UpdateScanner(GameObject[] options)
     {
+        if (m_scanningPaused) return;
+
         if (m_usingAutomatic)
         {
             UpdateAutomatic(options);

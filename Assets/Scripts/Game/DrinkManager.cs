@@ -144,7 +144,6 @@ public class DrinkManager : MonoBehaviour
         {
             if (m_slotIngredients[i] == Ingredients.None)
             {
-                Debug.Log("hello");
                 m_slotIngredients[i] = newIngredient;
                 m_slots[i].GetComponent<SpriteRenderer>().sprite = m_ingredientSprites[(int)newIngredient];
                 m_slotsSection2[i].GetComponent<SpriteRenderer>().sprite = m_ingredientSprites[(int)newIngredient];
@@ -186,7 +185,15 @@ public class DrinkManager : MonoBehaviour
             return;
         }
 
-        if (orderData.ingredients.Length == 1)
+        if (orderData.ingredients.Length == 0)
+        {
+            if (m_slotIngredients[0] != Ingredients.None)
+            {
+                m_failure.SetActive(true);
+                return;
+            }
+        }
+        else if (orderData.ingredients.Length == 1)
         {
             if (m_slotIngredients[0] != (Ingredients)orderData.ingredients[0] || m_slotIngredients[1] != Ingredients.None)
             {
@@ -194,7 +201,7 @@ public class DrinkManager : MonoBehaviour
                 return;
             }
         }
-        else
+        else if (orderData.ingredients.Length > 1)
         {
             bool foundIng1 = false;
             bool foundIng2 = false;
@@ -206,11 +213,11 @@ public class DrinkManager : MonoBehaviour
                 {
                     foundIng1 = true;
                 }
-                else if (m_slotIngredients[i] == Ingredients.Lemon)
+                else if (m_slotIngredients[i] == (Ingredients)orderData.ingredients[1])
                 {
                     foundIng2 = true;
                 }
-                else if (m_slotIngredients[i] == Ingredients.OrangeJuice)
+                else if (m_slotIngredients[i] == (Ingredients)orderData.ingredients[2])
                 {
                     foundIng3 = true;
                 }
@@ -222,8 +229,9 @@ public class DrinkManager : MonoBehaviour
                 return;
             }
         }
+        
 
-        m_success.SetActive(true);
+            m_success.SetActive(true);
     }
 
     public void CloseConfirm()
@@ -236,7 +244,7 @@ public class DrinkManager : MonoBehaviour
     private void NewOrder()
     {
         gameObject.GetComponent<CocktailManager>().ReadJSON();
-        m_currentOrderIndex = Random.Range(0, gameObject.GetComponent<CocktailManager>().m_cocktails.cocktailData.Length - 1);
+        m_currentOrderIndex = Random.Range(0, gameObject.GetComponent<CocktailManager>().m_cocktails.cocktailData.Length);
 
         foreach(var item in m_customerOrder)
         {

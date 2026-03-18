@@ -1,13 +1,13 @@
 using TMPro;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public enum MenuState
 {
     Start = 0,
     MainMenu = 1,
-    Settings = 2
+    Settings = 2,
+    Play = 3
 }
 
 public class MenuManager : MonoBehaviour
@@ -21,6 +21,8 @@ public class MenuManager : MonoBehaviour
     private GameObject m_menuCanvas;
     [SerializeField]
     private GameObject m_settingsCanvas;
+    [SerializeField]
+    private GameObject m_playCanvas;
 
     private MenuState m_state;
     private GameObject m_currentCanvas;
@@ -62,9 +64,14 @@ public class MenuManager : MonoBehaviour
                 m_currentCanvas = m_settingsCanvas;
                 gameObject.GetComponent<SettingsManager>().Init();
                 break;
+            case MenuState.Play:
+                m_currentCanvas = m_playCanvas;
+                m_playCanvas.GetComponent<PlayCanvasManager>().Init();
+                break;
         }
 
         m_currentCanvas.SetActive(true);
+
         m_currentCanvas.GetComponent<CanvasManager>().Init(m_state);
     }
 
@@ -73,6 +80,7 @@ public class MenuManager : MonoBehaviour
         m_startCanvas.SetActive(false);
         m_menuCanvas.SetActive(false);
         m_settingsCanvas.SetActive(false);
+        m_playCanvas.SetActive(false);
     }
 
     public void QuitGame()
@@ -90,16 +98,12 @@ public class MenuManager : MonoBehaviour
         {
             case MenuState.Start:
             case MenuState.MainMenu:
+            case MenuState.Play:
                 break;
             case MenuState.Settings:
                 m_currentCanvas.GetComponent<CanvasManager>().OnHighlightChange(newHighlight, m_state);
                 gameObject.GetComponent<SettingsManager>().OnHighlightChange(newHighlight);
                 break;
         }
-    }
-
-    public void LoadGame()
-    {
-        SceneManager.LoadScene("Game");
     }
 }

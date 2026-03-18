@@ -14,8 +14,17 @@ public class CanvasManager : MonoBehaviour
     [SerializeField]
     private GameObject m_panel;
 
+    private MenuState m_menuState;
+
     public void Init(MenuState state)
     {
+        m_menuState = state;
+
+        if (state == MenuState.Play)
+        {
+            return;
+        }
+
         GameObject.FindFirstObjectByType<Scanner>().init(m_options[0]);
         OnHighlightChange(0, state);
     }
@@ -23,6 +32,8 @@ public class CanvasManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (m_menuState == MenuState.Play) return;
+
         GameObject.FindFirstObjectByType<Scanner>().UpdateScanner(m_options);
     }
 
