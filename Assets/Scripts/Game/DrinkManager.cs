@@ -49,10 +49,10 @@ public class DrinkManager : MonoBehaviour
     GameObject m_confirmationPanel;
     [SerializeField]
     GameObject[] m_customerOrder;
+    
+
     [SerializeField]
-    GameObject m_success;
-    [SerializeField]
-    GameObject m_failure;
+    GameObject m_gameManager;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -63,11 +63,6 @@ public class DrinkManager : MonoBehaviour
         m_askingComplete = false;
         m_iceCubes.SetActive(false);
         m_confirmationPanel.SetActive(false);
-
-        m_success.SetActive(false);
-        m_failure.SetActive(false);
-
-        NewOrder();
     }
 
     // Update is called once per frame
@@ -96,8 +91,7 @@ public class DrinkManager : MonoBehaviour
 
         m_iceCubes.SetActive(false);
         m_confirmationPanel.SetActive(false);
-        m_success.SetActive(false);
-        m_failure.SetActive(false);
+        
         foreach (var item in m_customerOrder)
         {
             item.SetActive(true);
@@ -144,6 +138,7 @@ public class DrinkManager : MonoBehaviour
         {
             if (m_slotIngredients[i] == Ingredients.None)
             {
+                m_gameManager.GetComponent<GameManager>().IncrementStat(3);
                 m_slotIngredients[i] = newIngredient;
                 m_slots[i].GetComponent<SpriteRenderer>().sprite = m_ingredientSprites[(int)newIngredient];
                 m_slotsSection2[i].GetComponent<SpriteRenderer>().sprite = m_ingredientSprites[(int)newIngredient];
@@ -175,13 +170,13 @@ public class DrinkManager : MonoBehaviour
 
         if (m_activeGlass != (Glasses)orderData.glass)
         {
-            m_failure.SetActive(true);
+            m_gameManager.GetComponent<GameManager>().DrinkFailure();
             return;
         }
 
         if (m_iceCubes.activeSelf != orderData.ice)
         {
-            m_failure.SetActive(true);
+            m_gameManager.GetComponent<GameManager>().DrinkFailure();
             return;
         }
 
@@ -189,7 +184,7 @@ public class DrinkManager : MonoBehaviour
         {
             if (m_slotIngredients[0] != Ingredients.None)
             {
-                m_failure.SetActive(true);
+                m_gameManager.GetComponent<GameManager>().DrinkFailure();
                 return;
             }
         }
@@ -197,7 +192,7 @@ public class DrinkManager : MonoBehaviour
         {
             if (m_slotIngredients[0] != (Ingredients)orderData.ingredients[0] || m_slotIngredients[1] != Ingredients.None)
             {
-                m_failure.SetActive(true);
+                m_gameManager.GetComponent<GameManager>().DrinkFailure();
                 return;
             }
         }
@@ -225,13 +220,13 @@ public class DrinkManager : MonoBehaviour
 
             if (!(foundIng1 && foundIng2 && foundIng3))
             {
-                m_failure.SetActive(true);
+                m_gameManager.GetComponent<GameManager>().DrinkFailure();
                 return;
             }
         }
-        
 
-            m_success.SetActive(true);
+
+        m_gameManager.GetComponent<GameManager>().DrinkSuccess();
     }
 
     public void CloseConfirm()
@@ -241,7 +236,7 @@ public class DrinkManager : MonoBehaviour
         m_askingComplete = false;
     }
 
-    private void NewOrder()
+    public void NewOrder()
     {
         gameObject.GetComponent<CocktailManager>().ReadJSON();
         m_currentOrderIndex = Random.Range(0, gameObject.GetComponent<CocktailManager>().m_cocktails.cocktailData.Length);

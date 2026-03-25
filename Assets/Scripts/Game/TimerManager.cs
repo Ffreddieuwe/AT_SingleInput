@@ -71,4 +71,12 @@ public class TimerManager : MonoBehaviour
         System.TimeSpan ts = TimeSpan.FromSeconds(m_currentTime);
         gameObject.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds);
     }
+
+    private void MistakeMade()
+    {
+        if (m_gameMode == 2)
+        {
+            m_currentTime -= m_mistakePunishment;
+        }
+    }
 }

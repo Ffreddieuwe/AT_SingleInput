@@ -42,6 +42,9 @@ public class CameraManager : MonoBehaviour
     [SerializeField]
     private GameObject m_pauseDescriptionText;
 
+    [SerializeField]
+    private GameObject m_gameManager;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -55,23 +58,6 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            Move(Direction.Up);
-        }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
-            Move(Direction.Left);
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            Move(Direction.Down);
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            Move(Direction.Right);
-        }
-
         if (m_moving)
         {
             if (transform.position != m_targetPos)
@@ -96,6 +82,7 @@ public class CameraManager : MonoBehaviour
                 }
                 else if (m_selectedPanel == Panel.Up)
                 {
+                    m_gameManager.GetComponent<GameManager>().SetStatText();
                     m_pauseDescriptionText.SetActive(true);
                 }
             }
@@ -148,6 +135,7 @@ public class CameraManager : MonoBehaviour
                 }
                 break;
             case Direction.Down:
+                m_gameManager.GetComponent<GameManager>().HideStatText();
                 if (m_selectedPanel == Panel.Middle)
                 {
                     StartMovement(Panel.Down);

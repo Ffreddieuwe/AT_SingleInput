@@ -6,7 +6,6 @@ using static DrinkManager;
 public class ClockManager : MonoBehaviour
 {
     public GameObject hand;
-    public float speed = 80;
     public float currentRotation;
 
     [SerializeField]
@@ -22,6 +21,9 @@ public class ClockManager : MonoBehaviour
     [SerializeField]
     private GameObject m_pauseDescriptionText;
 
+    [SerializeField]
+    private GameObject m_gameManager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -36,11 +38,12 @@ public class ClockManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentRotation += Time.deltaTime * speed;
-        if (currentRotation >= 360)
+        if (!m_gameManager.GetComponent<GameManager>().orderActive)
         {
-            currentRotation = 0;
+            return;
         }
+
+        currentRotation = m_gameManager.GetComponent<GameManager>().m_rotation;
         hand.transform.rotation = Quaternion.Euler(0, 0, -currentRotation);
 
         if (m_panel != Camera.main.GetComponent<CameraManager>().m_selectedPanel || Camera.main.GetComponent<CameraManager>().m_moving)
@@ -262,6 +265,7 @@ public class ClockManager : MonoBehaviour
 
         if (currentRotation < 120)
         {
+            m_gameManager.GetComponent<GameManager>().IncrementStat(0);
             Camera.main.GetComponent<DrinkManager>().ResetDrink();
         }
         else if (currentRotation < 240)
