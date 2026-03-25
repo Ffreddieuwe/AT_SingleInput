@@ -31,7 +31,22 @@ public class MenuManager : MonoBehaviour
     void Start()
     {
         DisableAllCanvas();
-        m_currentCanvas = m_startCanvas;
+
+        SettingsManager settingsManager = gameObject.GetComponent<SettingsManager>();
+        settingsManager.ReadJSON();
+        if (settingsManager.settings.settingsData.ftue)
+        {
+            m_currentCanvas = m_startCanvas;
+            m_state = MenuState.Start;
+            settingsManager.settings.settingsData.ftue = false;
+            settingsManager.UpdateJSON();
+        }
+        else
+        {
+            m_currentCanvas = m_menuCanvas;
+            m_state = MenuState.MainMenu;
+        }
+        
         m_currentCanvas.SetActive(true);
         m_currentCanvas.GetComponent<CanvasManager>().Init(m_state);
     }

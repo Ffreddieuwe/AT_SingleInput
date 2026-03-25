@@ -100,6 +100,7 @@ public class ClockManager : MonoBehaviour
 
         if (currentRotation < 45 || currentRotation > 315)
         {
+            m_gameManager.GetComponent<GameManager>().PauseTimer(true);
             Camera.main.GetComponent<CameraManager>().Move(CameraManager.Direction.Up);
         }
         else if (currentRotation < 135)

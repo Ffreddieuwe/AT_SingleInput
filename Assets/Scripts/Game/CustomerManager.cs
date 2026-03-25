@@ -19,7 +19,6 @@ public class CustomerManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        ResetCustomer();
     }
 
     public void ResetCustomer()
@@ -35,6 +34,7 @@ public class CustomerManager : MonoBehaviour
     {
         if (m_moving)
         {
+            
             if (transform.position != m_targetPosition)
             {
                 if (Vector3.Distance(transform.position, m_targetPosition) < Time.deltaTime * m_speed)

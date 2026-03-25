@@ -78,6 +78,7 @@ public class CameraManager : MonoBehaviour
 
                 if (m_selectedPanel == Panel.Middle)
                 {
+                    m_gameManager.GetComponent<GameManager>().PauseTimer(false);
                     m_mainBarDescriptionText.SetActive(true);
                 }
                 else if (m_selectedPanel == Panel.Up)

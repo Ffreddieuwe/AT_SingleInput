@@ -19,12 +19,17 @@ public class PlayCanvasManager : MonoBehaviour
 
     public bool m_active = false;
 
+    [SerializeField]
+    private GameObject menuManager;
+
     public void Init()
     {
         EnableTextItem(0);
         m_active = true;
         GameObject.FindFirstObjectByType<Scanner>().m_scanningPaused = true;
         GameObject.FindFirstObjectByType<Scanner>().init(m_options[0]);
+        menuManager.GetComponent<SettingsManager>().settings.settingsData.gameMode = m_selectedDifficulty;
+        menuManager.GetComponent<SettingsManager>().UpdateJSON();
     }
 
     // Update is called once per frame
@@ -76,6 +81,8 @@ public class PlayCanvasManager : MonoBehaviour
     {
         m_selectedDifficulty = m_selectedDifficulty + 1 > 2 ? 0 : m_selectedDifficulty + 1;
         m_difficultyButtonString.GetComponent<TextMeshProUGUI>().text = m_difficultyStrings[m_selectedDifficulty];
+        menuManager.GetComponent<SettingsManager>().settings.settingsData.gameMode = m_selectedDifficulty;
+        menuManager.GetComponent<SettingsManager>().UpdateJSON();
     }
 
 

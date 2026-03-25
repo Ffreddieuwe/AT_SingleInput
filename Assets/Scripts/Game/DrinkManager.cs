@@ -105,6 +105,8 @@ public class DrinkManager : MonoBehaviour
         Camera.main.GetComponent<DrinkManager>().m_shouldAskComplete = true;
         // Slot 0 is martini, slot 1 is hiball, slot 2 is rocks.
 
+        gameObject.GetComponent<AudioManager>().PlaySound(4);
+
         if (glass == Glasses.Martini)
         {
             m_glasses[0].SetActive(true);
@@ -138,6 +140,15 @@ public class DrinkManager : MonoBehaviour
         {
             if (m_slotIngredients[i] == Ingredients.None)
             {
+                if (newIngredient != Ingredients.Mint && newIngredient != Ingredients.Cherries && newIngredient != Ingredients.Lemon)
+                {
+                    gameObject.GetComponent<AudioManager>().PlaySound(3);
+                }
+                else
+                {
+                    gameObject.GetComponent<AudioManager>().PlaySound(6);
+                }
+
                 m_gameManager.GetComponent<GameManager>().IncrementStat(3);
                 m_slotIngredients[i] = newIngredient;
                 m_slots[i].GetComponent<SpriteRenderer>().sprite = m_ingredientSprites[(int)newIngredient];
@@ -153,6 +164,7 @@ public class DrinkManager : MonoBehaviour
         m_iceCubes.SetActive(!m_iceCubes.activeSelf);
         Camera.main.GetComponent<DrinkManager>().m_shouldAskComplete = true;
         m_shouldAskComplete = true;
+        gameObject.GetComponent<AudioManager>().PlaySound(5);
     }
 
     public void ValidateDrink()

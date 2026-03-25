@@ -72,6 +72,7 @@ public class Scanner : MonoBehaviour
         {
             m_holdTimer = 0f;
             m_selectedGO.GetComponent<Button>().onClick.Invoke();
+            gameObject.GetComponent<AudioSource>().Play();
         }
     }
 
@@ -98,6 +99,7 @@ public class Scanner : MonoBehaviour
         {
             m_holdTimer = 0f;
             m_selectedGO.GetComponent<Button>().onClick.Invoke();
+            gameObject.GetComponent<AudioSource>().Play();
         }
     }
 

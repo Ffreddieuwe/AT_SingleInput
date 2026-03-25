@@ -1,4 +1,3 @@
-using Mono.Cecil.Cil;
 using System;
 using System.IO;
 using TMPro;
@@ -23,6 +22,7 @@ public class SettingsManager : MonoBehaviour
         public float menuSpeed;
         public float gameSpeed;
         public int gameMode;
+        public bool ftue;
     }
 
     [System.Serializable]

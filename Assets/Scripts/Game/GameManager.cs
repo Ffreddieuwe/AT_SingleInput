@@ -1,6 +1,8 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -30,6 +32,15 @@ public class GameManager : MonoBehaviour
 
     public float speed = 80;
 
+    private bool m_gameOver = false;
+
+    [SerializeField]
+    private GameObject m_gameoverPanel;
+    [SerializeField]
+    private GameObject m_stats1;
+    [SerializeField]
+    private GameObject m_stats2;
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -43,7 +54,7 @@ public class GameManager : MonoBehaviour
 
         orderActive = false;
 
-        m_timer.GetComponent<TimerManager>().enabled = false;
+        m_timer.GetComponent<TimerManager>().m_active = false;
 
         foreach (GameObject item in m_statTexts)
         {
@@ -54,12 +65,25 @@ public class GameManager : MonoBehaviour
         m_failure.SetActive(false);
         m_orderBubble.SetActive(false);
 
+        m_customer.GetComponent<CustomerManager>().ResetCustomer();
         m_customer.GetComponent<CustomerManager>().WalkIn();
+
+        m_gameoverPanel.SetActive(false);
+        m_stats1.SetActive(false);
+        m_stats2.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (m_gameOver)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SceneManager.LoadScene("Main_Menu");
+            }
+        }
+
         m_playtime += Time.deltaTime;
 
         if (m_successWaitTimer > 0)
@@ -84,19 +108,34 @@ public class GameManager : MonoBehaviour
     public void DrinkSuccess()
     {
         m_success.SetActive(true);
+        m_failure.SetActive(false);
         orderActive = false;
         m_successWaitTimer = 2f;
         IncrementStat(1);
+        m_timer.GetComponent<TimerManager>().m_active = false;
+        Camera.main.GetComponent<AudioManager>().PlaySound(0);
     }
 
     public void DrinkFailure()
     {
         m_failure.SetActive(true);
+        Camera.main.GetComponent<AudioManager>().PlaySound(1);
     }
 
     public void OutOfTime()
     {
+        Camera.main.GetComponent<AudioManager>().PlaySound(2);
 
+        m_gameOver = true;
+        m_gameoverPanel.SetActive(true);
+
+        m_stats1.GetComponent<TextMeshProUGUI>().text = "Drinks Made: " + m_drinksCompleted;
+        m_stats1.SetActive(true);
+        System.TimeSpan ts = TimeSpan.FromSeconds(m_playtime);
+        m_stats2.GetComponent<TextMeshProUGUI>().text = "Playtime: " + string.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds);
+        m_stats2.SetActive(true);
+
+        orderActive = false;
     }
 
     private void CustomerLeave()
@@ -105,6 +144,7 @@ public class GameManager : MonoBehaviour
         m_orderBubble.SetActive(false);
         m_customer.GetComponent<CustomerManager>().WalkOut();
         Camera.main.GetComponent<DrinkManager>().ResetDrink();
+        m_timer.GetComponent<TimerManager>().SetTimerText();
         m_success.SetActive(false);
     }
 
@@ -113,7 +153,7 @@ public class GameManager : MonoBehaviour
         Camera.main.GetComponent<DrinkManager>().NewOrder();
         m_orderBubble.SetActive(true);
         orderActive = true;
-        m_timer.GetComponent<TimerManager>().enabled = false;
+        m_timer.GetComponent<TimerManager>().m_active = true;
     }
 
     public void IncrementStat(int stat)
@@ -124,7 +164,7 @@ public class GameManager : MonoBehaviour
                 m_resets++;
                 m_success.SetActive(false);
                 m_failure.SetActive(false);
-
+                m_timer.GetComponent<TimerManager>().MistakeMade();
                 break;
             case 1:
                 m_drinksCompleted++;
@@ -158,5 +198,10 @@ public class GameManager : MonoBehaviour
         {
             item.SetActive(false);
         }
+    }
+
+    public void PauseTimer(bool pause)
+    {
+        m_timer.GetComponent<TimerManager>().m_active = !pause;
     }
 }

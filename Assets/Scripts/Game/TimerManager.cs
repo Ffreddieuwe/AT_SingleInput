@@ -21,12 +21,14 @@ public class TimerManager : MonoBehaviour
 
     public bool m_active;
 
+    [SerializeField]
+    private GameObject m_gameManager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         m_settingsObject.GetComponent<SettingsManager>().ReadJSON();
         m_gameMode = m_settingsObject.GetComponent<SettingsManager>().settings.settingsData.gameMode;
-        
 
         if (m_gameMode == 0)
         {
@@ -43,6 +45,7 @@ public class TimerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (m_gameMode == 0 || !m_active) return;   
 
         m_currentTime -= Time.deltaTime;
@@ -51,13 +54,14 @@ public class TimerManager : MonoBehaviour
         {
             m_currentTime = 0;
             m_active = false;
+            m_gameManager.GetComponent<GameManager>().OutOfTime();
         }
 
         System.TimeSpan ts = TimeSpan.FromSeconds(m_currentTime);
         gameObject.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds);
     }
 
-    private void SetTimerText()
+    public void SetTimerText()
     {
         if (m_gameMode == 1)
         {
@@ -72,11 +76,13 @@ public class TimerManager : MonoBehaviour
         gameObject.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds);
     }
 
-    private void MistakeMade()
+    public void MistakeMade()
     {
         if (m_gameMode == 2)
         {
             m_currentTime -= m_mistakePunishment;
+            System.TimeSpan ts = TimeSpan.FromSeconds(m_currentTime);
+            gameObject.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds);
         }
     }
 }
